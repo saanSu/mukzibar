@@ -2,6 +2,10 @@ package yolo.test;
 
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -9,32 +13,82 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
+import java.awt.SystemColor;
+import java.awt.Color;
 
-public class TestGUI extends JFrame {
+public class GameMain extends JFrame {
 	String guest;
 	
-	private JButton btMook;
-	private JButton btZzi;
-	private JButton btBbar;
-	private JButton btDrop;
-	private JButton btStop;
-	private JLabel lbEnemy;
-	private JMenuItem mnNew;
-	private JMenuItem mnOpen;
-	private JTextArea battleLog;
+	boolean attack;
+	boolean ing;
+	JButton btMook;
+	JButton btZzi;
+	JButton btBbar;
+	JButton btDrop;
+	JButton btStart;
+	JLabel lbEnemy;
+	JMenuItem mnNew;
+	JMenuItem mnOpen;
+	JTextArea battleLog;
+	JLabel lbLog;
 
-	public TestGUI() {
+	public GameMain() {
 		configure();
 		buildMenu();
 		buildPane();
+		addListener();
 	}
 
+	private void addListener() {
+		this.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				if(ing) {
+					JOptionPane.showConfirmDialog(GameMain.this, "게임이 진행중입니다.\n종료하시겠습니까?");
+				}else {
+					System.exit(0);
+				}
+			}
+		});
+		// 시작 BUTTON 처리
+		btStart.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				attack=true;
+				ing = true;
+				btStart.setEnabled(false);
+				btMook.setEnabled(true);
+				btZzi.setEnabled(true);
+				btBbar.setEnabled(true);
+				btDrop.setEnabled(true);
+				battleLog.append("[SYSTEM] 묵찌빠 시작! 당신의 선공입니다.\n");
+				lbLog.setText("공격중");
+			}
+		});
+		btDrop.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ing = false;
+				btStart.setEnabled(!false);
+				btMook.setEnabled(!true);
+				btZzi.setEnabled(!true);
+				btBbar.setEnabled(!true);
+				btDrop.setEnabled(!true);
+				battleLog.append("[SYSTEM] 당신의 기권! 패배 처리됩니다.\n\n");
+				lbLog.setText("패배..");
+			}
+		});
+		btMook.addActionListener(new GameBtsListener(this));
+		btBbar.addActionListener(new GameBtsListener(this));
+		btZzi.addActionListener(new GameBtsListener(this));
+	}
 	
+
+
 	private void configure() {
 		UIManager.put("Button.font", new Font("맑은 고딕", Font.PLAIN, 12));
 		UIManager.put("TextArea.font", new Font("맑은 고딕", Font.PLAIN, 12));
@@ -44,11 +98,10 @@ public class TestGUI extends JFrame {
 		UIManager.put("MenuItem.font", new Font("맑은 고딕", Font.PLAIN, 12));
 
 		setTitle("대결! 묵찌빠 - 게스트");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		setResizable(false);
 		setSize(400, 615);
 		setLocation(700, 100);
-
 	}
 
 	private void buildMenu() {
@@ -86,20 +139,24 @@ public class TestGUI extends JFrame {
 		btMook = new JButton("\uBB35(1)");
 		btMook.setEnabled(false);
 		btMook.setMnemonic('1');
+		btMook.setActionCommand("묵");
 		panel.add(btMook);
 
 		btZzi = new JButton("\uCC0C(2)");
 		btZzi.setEnabled(false);
 		btZzi.setMnemonic('2');
+		btZzi.setActionCommand("찌");
 		panel.add(btZzi);
 
 		btBbar = new JButton("\uBE60(3)");
 		btBbar.setEnabled(false);
 		btBbar.setMnemonic('3');
+		btBbar.setActionCommand("빠");
 		panel.add(btBbar);
 
 		lbEnemy = new JLabel("??");
-		lbEnemy.setFont(new Font("빙그레체", Font.PLAIN, 42));
+		lbEnemy.setForeground(SystemColor.textHighlight);
+		lbEnemy.setFont(new Font("맑은 고딕", Font.PLAIN, 44));
 		lbEnemy.setHorizontalAlignment(SwingConstants.CENTER);
 		lbEnemy.setBounds(119, 88, 155, 110);
 		getContentPane().add(lbEnemy);
@@ -115,14 +172,21 @@ public class TestGUI extends JFrame {
 		btDrop.setBounds(307, 188, 75, 23);
 		getContentPane().add(btDrop);
 
-		btStop = new JButton("\uC2DC\uC791(S)");
-		btStop.setMnemonic('s');
-		btStop.setBounds(307, 155, 75, 23);
-		getContentPane().add(btStop);
+		btStart = new JButton("\uC2DC\uC791(S)");
+		btStart.setMnemonic('s');
+		btStart.setBounds(307, 155, 75, 23);
+		getContentPane().add(btStart);
+		
+		lbLog = new JLabel("");
+		lbLog.setHorizontalAlignment(SwingConstants.RIGHT);
+		lbLog.setFont(new Font("맑은 고딕", Font.PLAIN, 15));
+		lbLog.setForeground(Color.RED);
+		lbLog.setBounds(297, 221, 85, 23);
+		getContentPane().add(lbLog);
 
 	}
 
 	public static void main(String[] args) {
-		new TestGUI().setVisible(true);
+		new GameMain().setVisible(true);
 	}
 }
