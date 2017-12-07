@@ -1,4 +1,4 @@
-package yolo.test;
+package yolo.mukzzi;
 
 import java.awt.Font;
 import java.awt.GridLayout;
@@ -6,8 +6,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
 
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -19,10 +21,12 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
+import javax.swing.filechooser.FileFilter;
+
 import java.awt.SystemColor;
 import java.awt.Color;
 
-public class GameMain extends JFrame {
+public class MukZziGameMain extends JFrame {
 	String guest;
 	
 	boolean attack;
@@ -38,7 +42,7 @@ public class GameMain extends JFrame {
 	JTextArea battleLog;
 	JLabel lbLog;
 
-	public GameMain() {
+	public MukZziGameMain() {
 		configure();
 		buildMenu();
 		buildPane();
@@ -46,11 +50,19 @@ public class GameMain extends JFrame {
 	}
 
 	private void addListener() {
+		mnOpen.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JFileChooser fc = new JFileChooser();
+				fc.showOpenDialog(MukZziGameMain.this);
+				
+			}
+		});
+		
 		this.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
 				if(ing) {
-					JOptionPane.showConfirmDialog(GameMain.this, "∞‘¿”¿Ã ¡¯«‡¡ﬂ¿‘¥œ¥Ÿ.\n¡æ∑·«œΩ√∞⁄Ω¿¥œ±Ó?");
+					JOptionPane.showConfirmDialog(MukZziGameMain.this, "∞‘¿”¿Ã ¡¯«‡¡ﬂ¿‘¥œ¥Ÿ.\n¡æ∑·«œΩ√∞⁄Ω¿¥œ±Ó?");
 				}else {
 					System.exit(0);
 				}
@@ -94,9 +106,13 @@ public class GameMain extends JFrame {
 		UIManager.put("TextArea.font", new Font("∏º¿∫ ∞ÌµÒ", Font.PLAIN, 12));
 		UIManager.put("TextField.font", new Font("∏º¿∫ ∞ÌµÒ", Font.PLAIN, 11));
 		UIManager.put("Label.font", new Font("∏º¿∫ ∞ÌµÒ", Font.PLAIN, 11));
+		UIManager.put("List.font", new Font("∏º¿∫ ∞ÌµÒ", Font.PLAIN, 11));
+		UIManager.put("ComboBox.font", new Font("∏º¿∫ ∞ÌµÒ", Font.PLAIN, 11));
+		UIManager.put("TableHeader.font", new Font("∏º¿∫ ∞ÌµÒ", Font.PLAIN, 11));
 		UIManager.put("Menu.font", new Font("∏º¿∫ ∞ÌµÒ", Font.PLAIN, 12));
 		UIManager.put("MenuItem.font", new Font("∏º¿∫ ∞ÌµÒ", Font.PLAIN, 12));
-
+		UIManager.put("MenuItem.font", new Font("∏º¿∫ ∞ÌµÒ", Font.PLAIN, 12));
+		
 		setTitle("¥Î∞·! π¨¬Ó∫¸ - ∞‘Ω∫∆Æ");
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		setResizable(false);
@@ -187,6 +203,6 @@ public class GameMain extends JFrame {
 	}
 
 	public static void main(String[] args) {
-		new GameMain().setVisible(true);
+		new MukZziGameMain().setVisible(true);
 	}
 }

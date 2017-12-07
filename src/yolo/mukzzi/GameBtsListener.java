@@ -1,12 +1,12 @@
-package yolo.test;
+package yolo.mukzzi;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class GameBtsListener implements ActionListener {
-	GameMain gameMain;
+	MukZziGameMain gameMain;
 
-	public GameBtsListener(GameMain gameMain) {
+	public GameBtsListener(MukZziGameMain gameMain) {
 		this.gameMain = gameMain;
 	}
 
